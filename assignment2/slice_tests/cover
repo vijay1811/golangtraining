@@ -1,0 +1,15 @@
+mode: set
+golangtraining\assignment2\slice_tests\sliceAssn.go:26.41,27.77 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:27.77,29.3 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:29.3,29.71 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:29.71,31.3 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:31.3,31.72 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:31.72,33.3 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:33.3,35.3 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:38.37,40.24 2 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:43.2,43.15 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:40.24,42.3 1 1
+golangtraining\assignment2\slice_tests\sliceAssn.go:46.13,51.42 3 0
+golangtraining\assignment2\slice_tests\sliceAssn.go:51.42,53.3 1 0
+golangtraining\assignment2\slice_tests\sliceAssn.go:53.3,56.25 2 0
+golangtraining\assignment2\slice_tests\sliceAssn.go:56.25,58.4 1 0
