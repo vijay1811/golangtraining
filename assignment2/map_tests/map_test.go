@@ -24,6 +24,7 @@ func Test_isValid1(t *testing.T) {
 	}
 }
 
+// this test should fail
 func Test_isValid1failure(t *testing.T) {
 	t.Fatalf("this test case is failing")
 	input1 := "I am fine1"
