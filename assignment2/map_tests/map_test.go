@@ -24,6 +24,16 @@ func Test_isValid1(t *testing.T) {
 	}
 }
 
+func Test_isValid1failure(t *testing.T) {
+	t.Fatalf("this test case is failing")
+	input1 := "I am fine1"
+	testedOutput1 := isValid(input1)
+	expectedOutput1 := false
+	if testedOutput1 != expectedOutput1 {
+		t.Error("Expected Output", expectedOutput1, "Tested Output", testedOutput1)
+	}
+}
+
 func Test_isValid2(t *testing.T) {
 	input1 := "i am fine"
 	testedOutput1 := isValid(input1)
