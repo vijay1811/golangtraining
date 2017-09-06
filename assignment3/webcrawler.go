@@ -29,7 +29,6 @@ func getDataLenTime(url string) ([]byte, int, int) {
 	startTime := time.Now()
 	resp, err := http.Get(url)
 	timeInMS := time.Now().Sub(startTime)
-	fmt.Println(timeInMS)
 	if err != nil {
 		fmt.Println(err)
 		return nil, 0, 0.0
