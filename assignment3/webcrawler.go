@@ -11,6 +11,12 @@ import (
 	"time"
 )
 
+var (
+	urlfunc = http.Get
+	timeNow = time.Now
+	readAll = ioutil.ReadAll
+)
+
 type Lang struct {
 	Name     string
 	URL      string
@@ -19,27 +25,32 @@ type Lang struct {
 }
 
 func crawl(pfunc func([]byte, *Lang), lang *Lang) {
-	data, bts, timeInMS := getDataLenTime(lang.URL)
+	data, bts, timeInMS, err := getDataLenTime(lang.URL)
+	// when you get an error panic - Done
+	if err != nil {
+		panic(err)
+	}
 	lang.Bytes, lang.TimeInMS = bts, timeInMS/1000000
 	pfunc(data, lang)
 }
 
-func getDataLenTime(url string) ([]byte, int, int) {
+//TODO return error and handle it in crawl - Done
+func getDataLenTime(url string) ([]byte, int, int, error) {
 
 	startTime := time.Now()
-	resp, err := http.Get(url)
-	timeInMS := time.Now().Sub(startTime)
+	resp, err := urlfunc(url)
 	if err != nil {
 		fmt.Println(err)
-		return nil, 0, 0.0
+		return nil, 0, 0, err
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := readAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return nil, 0, 0.0
+		return nil, 0, 0, err
 	}
-	return data, len(data), int(timeInMS)
+	timeInMS := time.Now().Sub(startTime)
+	return data, len(data), int(timeInMS), nil
 }
 
 func main() {
@@ -48,29 +59,51 @@ func main() {
 		"https://golang.org/"}
 
 	for idx, url := range urlArr {
+		// be ready for the panic here - Done
+		defer func() {
+			if r := recover(); r != nil {
+				fmt.Println("Recovered in main, Error : ", r)
+			}
+		}()
 		crawl(
 			func(data []byte, lang *Lang) {
 				fptr1, err := os.Create("./goFormatted-" + strconv.Itoa(idx+1) + "-" + strings.Split(strings.Split(url, "//")[1], "/")[0] + ".html")
-				fptr2, err := os.Create("./jsonFormatted-" + strconv.Itoa(idx+1) + "-" + strings.Split(strings.Split(url, "//")[1], "/")[0] + ".txt")
-				defer fptr1.Close()
-				defer fptr2.Close()
-
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
-				_, err = fptr1.Write(data)
+				// handle error immediately - Done
+				fptr2, err := os.Create("./jsonFormatted-" + strconv.Itoa(idx+1) + "-" + strings.Split(strings.Split(url, "//")[1], "/")[0] + ".txt")
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				bytesWritten, err := fptr1.Write(data)
+				if err != nil {
+					// panic - Done
+					panic(err)
+				}
+				if bytesWritten != len(data) {
+					fmt.Println("Some data was not written to file")
+				}
 
+				// check if bytes written are equal to len(data) - Done
 				js, err := json.Marshal(*lang)
 				if err != nil {
-					fmt.Println(err)
-					return
+					// panic - Done
+					panic(err)
 				}
-				_, err = fptr2.Write(js)
+				bytesWritten, err = fptr2.Write(js)
 				if err != nil {
-					fmt.Println(err)
-					return
+					// panic - Done
+					panic(err)
 				}
+				// chek if bytes written are equal to len(data) - Done
+				if bytesWritten != len(js) {
+					fmt.Println("some data was not written into file")
+				}
+				fptr1.Close()
+				fptr2.Close()
 			},
 			&Lang{strings.Split(url, "//")[1], url, 0, 0.0})
 	}
